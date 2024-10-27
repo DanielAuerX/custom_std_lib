@@ -1,4 +1,4 @@
-namespace lists
+namespace clib
 {
 
     template <typename T>

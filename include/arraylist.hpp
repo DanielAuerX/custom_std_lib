@@ -3,7 +3,11 @@
 #include <cstddef>
 #include <iostream>
 
-namespace lists
+
+/*  in c++, std vector == arraylist
+    in java, vector (synchronized, thread safe) != arraylist (not thread safe)
+*/
+namespace clib
 {
     template <typename T>
     class ArrayList
