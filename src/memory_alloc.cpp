@@ -33,7 +33,7 @@ size_t get_size(void *ptr)
     {
         return it->second;
     }
-    throw std::runtime_error("Cannot find address in allocated memory. Is new[] being used for arrays?");
+    throw std::runtime_error("cannot find address in allocated memory");
 }
 
 void *operator new(std::size_t size)
