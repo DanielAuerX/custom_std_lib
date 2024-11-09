@@ -38,7 +38,7 @@ namespace clib
             return;
         }
         length--;
-        // enough to reduce length because memory section stays allocated and next push_back call will overrite
+        // enough to reduce length because memory section stays allocated and next push_back call will override
         // maybe call desctructor if clean up is needed
         std::cout << "'deleted' last element. new length: " << length << std::endl;
     }

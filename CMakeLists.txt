@@ -7,9 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include_directories(include)
 
-add_library(clib INTERFACE)
+add_library(clib STATIC src/memory_alloc.cpp)
 
-target_include_directories(clib INTERFACE include)
+target_include_directories(clib PUBLIC include)
 
 
 add_executable(run_tests test/test_main.cpp)

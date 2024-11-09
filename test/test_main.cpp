@@ -1,5 +1,6 @@
 #include "../include/arraylist.hpp"
 #include "../include/linkedlist.hpp"
+#include "../include/memory_alloc.hpp"
 #include <iostream>
 
 using namespace clib;
@@ -64,8 +65,23 @@ void testLinkedList()
     std::cout << "back value: " << linkedList.back() << "\n";
 }
 
+void testMemoryAlloc()
+{
+    std::cout << "initial memory usage: " << get_memory_usage()  << "\n";
+
+    int *intPtr = new int(42);
+
+    int *intArray = new int[10];
+
+    delete intPtr;
+
+    delete[] intArray;
+    std::cout << "final memory usage: " << get_memory_usage() << "\n";
+}
+
 int main()
 {
+    //testMemoryAlloc();
     testLinkedList();
     // testArrayList();
 

@@ -25,9 +25,9 @@ namespace clib
         mHead = nullptr;
     }
 
-    /* before:              Head → [10] → [20] → nullptr
+    /* before:              Head > [10] > [20] > nullptr
                             push_front(5)
-        after:              Head → [5] → [10] → [20] → nullptr
+        after:              Head > [5] > [10] > [20] > nullptr
     */
     template <typename T>
     void LinkedList<T>::push_front(const T &aData)
@@ -88,7 +88,7 @@ namespace clib
     {
         if (mHead == nullptr)
         {
-            std::cout << "the list is empty. Cannot pop the front\n";
+            std::cout << "the list is empty. Cannot pop the back\n";
             return;
         }
         Node *lTemp = mHead;
