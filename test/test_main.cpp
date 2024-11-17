@@ -5,6 +5,20 @@
 
 using namespace clib;
 
+void printContentArrayList(const ArrayList<int> &arrayList, const std::string &tag)
+{
+    std::string result = tag + ": ";
+    for (size_t i = 0; i < arrayList.size(); ++i)
+    {
+        result += std::to_string(arrayList[i]);
+        if (i < arrayList.size() - 1)
+        {
+            result += ", ";
+        }
+    }
+    std::cout << result << "\n";
+}
+
 void testArrayList()
 {
     ArrayList<int> intList(5);
@@ -15,22 +29,22 @@ void testArrayList()
 
     std::cout << "size of array: " << intList.size() << std::endl;
 
-    intList.push_back(99);
+    intList.push_back(2);
+    std::cout << "size of array: " << intList.size() << std::endl;
+
+    intList.push_back(9);
     std::cout << "size of array: " << intList.size() << std::endl;
 
     intList.push_back(99);
     std::cout << "size of array: " << intList.size() << std::endl;
 
-    intList.push_back(99);
+    intList.push_back(73);
     std::cout << "size of array: " << intList.size() << std::endl;
 
-    intList.push_back(99);
+    intList.push_back(1);
     std::cout << "size of array: " << intList.size() << std::endl;
 
-    intList.push_back(99);
-    std::cout << "size of array: " << intList.size() << std::endl;
-
-    intList.push_back(99);
+    intList.push_back(-1);
     std::cout << "size of array: " << intList.size() << std::endl;
 
     intList.pop_back();
@@ -43,6 +57,10 @@ void testArrayList()
 
     intList.push_back(99);
     std::cout << "size of array: " << intList.size() << std::endl;
+
+    printContentArrayList(intList, "before");
+    intList.sort();
+    printContentArrayList(intList, "after");
 }
 
 void testLinkedList()
@@ -67,7 +85,7 @@ void testLinkedList()
 
 void testMemoryAlloc()
 {
-    std::cout << "initial memory usage: " << get_memory_usage()  << "\n";
+    std::cout << "initial memory usage: " << get_memory_usage() << "\n";
 
     int *intPtr = new int(42);
 
@@ -81,9 +99,9 @@ void testMemoryAlloc()
 
 int main()
 {
-    //testMemoryAlloc();
-    testLinkedList();
-    // testArrayList();
+    // testMemoryAlloc();
+    // testLinkedList();
+    testArrayList();
 
     return 0;
 }
