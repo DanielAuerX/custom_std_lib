@@ -58,8 +58,15 @@ void testArrayList()
     intList.push_back(99);
     std::cout << "size of array: " << intList.size() << std::endl;
 
+    bool contains = intList.contains(73);
+    std::cout
+        << "the arraylist contains 73: " << contains << std::endl;
+    
+    contains = intList.contains(10);
+    std::cout << "the arraylist contains 10: " << contains << std::endl;
+
     printContentArrayList(intList, "before");
-    intList.sort();
+    intList.sort(Order::ASC, SortType::MERGE_SORT);
     printContentArrayList(intList, "after");
 }
 

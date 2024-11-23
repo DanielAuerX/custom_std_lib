@@ -1,5 +1,7 @@
 *TODO:*
 - Logging
+- cf TODO
+- ...
 
 *DONE:*
 - ArrayList/Vector
