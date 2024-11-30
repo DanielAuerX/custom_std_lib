@@ -77,7 +77,7 @@ namespace clib
     }
 
     template <typename T>
-    void ArrayList<T>::mergeAsc(T inputArray[], T left[], size_t leftSize, T right[], size_t rightSize)
+    void ArrayList<T>::merge_asc(T inputArray[], T left[], size_t leftSize, T right[], size_t rightSize)
     {
         size_t i = 0, j = 0, k = 0;
         while (i < leftSize && j < rightSize)
@@ -110,7 +110,7 @@ namespace clib
     }
 
     template <typename T>
-    void ArrayList<T>::mergeDesc(T inputArray[], T left[], size_t leftSize, T right[], size_t rightSize)
+    void ArrayList<T>::merge_desc(T inputArray[], T left[], size_t leftSize, T right[], size_t rightSize)
     {
         size_t i = 0, j = 0, k = 0;
         while (i < leftSize && j < rightSize)
@@ -169,11 +169,11 @@ namespace clib
 
         if (order == ASC)
         {
-            mergeAsc(inputArray, leftHalf, midIndex, rightHalf, inputLength - midIndex);
+            merge_asc(inputArray, leftHalf, midIndex, rightHalf, inputLength - midIndex);
         }
         else
         {
-            mergeDesc(inputArray, leftHalf, midIndex, rightHalf, inputLength - midIndex);
+            merge_desc(inputArray, leftHalf, midIndex, rightHalf, inputLength - midIndex);
         }
 
         delete[] leftHalf;
@@ -187,7 +187,7 @@ namespace clib
         {
             for (size_t j = 0; j < inputLength - 1 - i; j++)
             {
-                if (isBigger(inputArray[j], inputArray[j + 1], order))
+                if (is_bigger(inputArray[j], inputArray[j + 1], order))
                 {
                     T temp = inputArray[j];
                     inputArray[j] = inputArray[j + 1];
@@ -198,7 +198,7 @@ namespace clib
     }
 
     template <typename T>
-    bool ArrayList<T>::isBigger(const T x, const T y, const Order &order)
+    bool ArrayList<T>::is_bigger(const T x, const T y, const Order &order)
     {
         if (order == ASC)
         {
@@ -213,11 +213,7 @@ namespace clib
     template <typename T>
     int ArrayList<T>::binary_search(const T sortedInputArray[], const size_t &inputLength, const T &target)
     {
-        // TODO: dont use copy of sortedInputArray?
-        // add to header
-        size_t low = 0;
-        size_t high = inputLength - 1;
-        size_t mid;
+        size_t low = 0, high = inputLength - 1, mid;
         while (low <= high)
         {
             mid = low + (high - low) / 2;

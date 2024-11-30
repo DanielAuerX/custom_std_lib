@@ -38,11 +38,11 @@ namespace clib
         // TODO: removeAtIndex
 
     private:
-        void mergeAsc(T inputArray[], T left[], size_t leftSize, T right[], size_t rightSize);
-        void mergeDesc(T inputArray[], T left[], size_t leftSize, T right[], size_t rightSize);
+        void merge_asc(T inputArray[], T left[], size_t leftSize, T right[], size_t rightSize);
+        void merge_desc(T inputArray[], T left[], size_t leftSize, T right[], size_t rightSize);
         void merge_sort(T inputArray[], size_t inputLength, const Order &order);
         void bubble_sort(T inputArray[], const size_t &inputLength, const Order &order);
-        bool isBigger(const T i, const T j, const Order &order);
+        bool is_bigger(const T i, const T j, const Order &order);
         int binary_search(const T sortedInputArray[], const size_t &inputLength, const T &target);
 
         void resize();

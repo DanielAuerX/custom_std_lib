@@ -7,7 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include_directories(include)
 
-add_library(clib STATIC src/memory_alloc.cpp)
+add_library(clib STATIC src/memory_alloc.cpp
+src/logging.cpp)
 
 target_include_directories(clib PUBLIC include)
 

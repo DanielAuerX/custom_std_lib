@@ -1,6 +1,7 @@
 #include "../include/arraylist.hpp"
 #include "../include/linkedlist.hpp"
 #include "../include/memory_alloc.hpp"
+#include "../include/logging.hpp"
 #include <iostream>
 
 using namespace clib;
@@ -104,11 +105,21 @@ void testMemoryAlloc()
     std::cout << "final memory usage: " << get_memory_usage() << "\n";
 }
 
+void test_logging(){
+        clib::Log &logger = clib::Log::get_instance();
+    //logger.set_log_level(clib::LogLevel::DEBUG);
+
+    logger.log(clib::LogLevel::DEBUG, "This is a DEBUG message.");
+    logger.log(clib::LogLevel::INFO, "This is an INFO message.");
+    logger.log(clib::LogLevel::WARNING, "This is a WARNING message.");
+    logger.log(clib::LogLevel::ERROR, "This is an ERROR message.");
+}
+
 int main()
 {
     // testMemoryAlloc();
     // testLinkedList();
-    testArrayList();
-
+    //testArrayList();
+test_logging();
     return 0;
 }
