@@ -62,7 +62,7 @@ void testArrayList()
     bool contains = intList.contains(73);
     std::cout
         << "the arraylist contains 73: " << contains << std::endl;
-    
+
     contains = intList.contains(10);
     std::cout << "the arraylist contains 10: " << contains << std::endl;
 
@@ -73,6 +73,8 @@ void testArrayList()
 
 void testLinkedList()
 {
+    clib::Log &logger = clib::Log::get_instance();
+
     LinkedList<int> linkedList;
     int first = 5;
 
@@ -87,8 +89,8 @@ void testLinkedList()
     int anotherNewFirst = 1;
     linkedList.push_back(anotherNewFirst);
 
-    std::cout << "front value: " << linkedList.front() << "\n";
-    std::cout << "back value: " << linkedList.back() << "\n";
+    logger.log(clib::LogLevel::INFO, "front value: " + std::to_string(linkedList.front()));
+    logger.log(clib::LogLevel::INFO, "back value: " + std::to_string(linkedList.back()));
 }
 
 void testMemoryAlloc()
@@ -105,21 +107,26 @@ void testMemoryAlloc()
     std::cout << "final memory usage: " << get_memory_usage() << "\n";
 }
 
-void test_logging(){
-        clib::Log &logger = clib::Log::get_instance();
-    //logger.set_log_level(clib::LogLevel::DEBUG);
+void test_logging()
+{
+    clib::Log &logger = clib::Log::get_instance();
+    // logger.set_log_level(clib::LogLevel::DEBUG);
 
-    logger.log(clib::LogLevel::DEBUG, "This is a DEBUG message.");
-    logger.log(clib::LogLevel::INFO, "This is an INFO message.");
-    logger.log(clib::LogLevel::WARNING, "This is a WARNING message.");
-    logger.log(clib::LogLevel::ERROR, "This is an ERROR message.");
+    logger.log(clib::LogLevel::DEBUG, "DEBUG MESSAGE");
+    logger.log(clib::LogLevel::INFO, "INFO MESSAGE");
+    logger.log(clib::LogLevel::WARNING, "WARNING");
+    logger.log(clib::LogLevel::ERROR, "ERROR MESSAGE");
+
+    const int testInt = 10;
+    // logger.log(clib::LogLevel::INFO, "This is a test with variables {}", testInt);
 }
 
 int main()
 {
     // testMemoryAlloc();
-    // testLinkedList();
-    //testArrayList();
-test_logging();
+    testLinkedList();
+    // testArrayList();
+    // test_logging();
+    //std::cout << "final memory usage: " << get_memory_usage() << "\n";
     return 0;
 }

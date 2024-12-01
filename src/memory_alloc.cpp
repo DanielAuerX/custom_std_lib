@@ -1,10 +1,10 @@
 #include "memory_alloc.hpp"
 #include <map>
 #include <stdexcept>
+#include <atomic>
 
-size_t total_allocated_memory = 0;
+std::atomic<size_t> total_allocated_memory{0};
 std::map<void *, size_t> allocated_array_memory;
-clib::Log &logger = clib::Log::get_instance();
 
 size_t get_memory_usage()
 {
@@ -43,11 +43,8 @@ void *operator new(std::size_t size)
     {
         throw std::bad_alloc();
     }
-    // object does not exist yet?
-    //if (logger)
-    //{
-    //    logger -> log(clib::LogLevel::DEBUG, "Allocating " + std::to_string(size) + " bytes at " + clib::pointer_to_string(ptr));
-    //}
+
+    //std::cout << "NEW: Allocating " << size << " bytes at " << ptr << "\n";
     total_allocated_memory += size;
     return ptr;
 };
@@ -59,7 +56,9 @@ void *operator new[](std::size_t size)
     {
         throw std::bad_alloc();
     }
-    // logger.log(clib::LogLevel::DEBUG, "Allocating array of" + std::to_string(size) + " bytes at " + clib::pointer_to_string(ptr));
+
+    //std::cout << "NEW[]: Allocating array of" << size << " bytes at " << ptr << "\n";
+
     add_allocation(ptr, size);
     total_allocated_memory += size;
     return ptr;
@@ -67,7 +66,7 @@ void *operator new[](std::size_t size)
 
 void operator delete(void *memory, size_t size) noexcept
 {
-    // logger.log(clib::LogLevel::DEBUG, "Freeing " + clib::pointer_to_string(memory) + " (" + std::to_string(size) + " bytes)");
+    //std::cout << "DELETE: Freeing " << memory << " (" <<size << " bytes)\n";
     free(memory);
     total_allocated_memory -= size;
 };
@@ -75,6 +74,7 @@ void operator delete(void *memory, size_t size) noexcept
 void operator delete[](void *memory) noexcept
 {
     size_t size = get_size(memory);
+    //std::cout << "DELETE[]: Freeing " << memory << " (" <<size << " bytes)\n";
     operator delete(memory, size);
     remove_allocation(memory);
 }

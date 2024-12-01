@@ -1,13 +1,15 @@
 #include "logging.hpp"
-#include <ctime>
-#include <thread>
 #include <sstream>
 #include <iomanip>
 #include <cstdint>
+#include <thread>
+#include <ctime>
+
 
 namespace clib
 {
     Log Log::mInstance;
+    bool Log::mIsInitialized = false;
 
     Log::Log()
     {
@@ -21,11 +23,13 @@ namespace clib
         {
             mCurrentLevel = parse_log_level(logLevelFromEnv);
         }
+        mIsInitialized = true;
     }
 
     Log::~Log()
     {
-        log(LogLevel::DEBUG, "destroying singleton for logging");
+        log(LogLevel::DEBUG, "destroying logging singleton");
+        mIsInitialized = false;
     }
 
     Log &Log::get_instance()
@@ -33,22 +37,9 @@ namespace clib
         return mInstance; // eager implementation singleton
     }
 
-    std::string get_date_time()
+    bool &Log::is_initialized()
     {
-        time_t timestamp = time(nullptr);
-        struct tm localTime;
-        localtime_r(&timestamp, &localTime);
-        char buffer[64];
-        strftime(buffer, sizeof(buffer), "[%Y-%m-%d %H:%M:%S]", &localTime);
-        return std::string(buffer);
-    }
-
-    std::string get_thread()
-    {
-        std::thread::id id = std::this_thread::get_id();
-        std::ostringstream oss;
-        oss << "[Thread " << id << "]";
-        return oss.str();
+        return mIsInitialized;
     }
 
     void Log::log(const LogLevel &aLevel, const std::string &aMessage)
@@ -59,14 +50,38 @@ namespace clib
             return;
         }
 
-        const std::string message = get_date_time() + log_level_to_string(aLevel) + get_thread() + ": " + aMessage;
+        const std::string message = get_prefix(aLevel) + aMessage;
         write_to_console(message);
+        // TODO: write_to_file
     }
 
     void Log::set_log_level(const LogLevel &aLevel)
     {
         std::lock_guard<std::mutex> lock(mMutex);
         mCurrentLevel = aLevel;
+    }
+
+    std::string Log::get_date_time()
+    {
+        time_t timestamp = time(nullptr);
+        struct tm localTime;
+        localtime_r(&timestamp, &localTime);
+        char buffer[64];
+        strftime(buffer, sizeof(buffer), "[%Y-%m-%d %H:%M:%S]", &localTime);
+        return std::string(buffer);
+    }
+
+    std::string Log::get_thread()
+    {
+        std::thread::id id = std::this_thread::get_id();
+        std::ostringstream oss;
+        oss << "[Thread " << id << "]";
+        return oss.str();
+    }
+
+    std::string Log::get_prefix(const LogLevel &aLevel)
+    {
+        return get_date_time() + log_level_to_string(aLevel) + get_thread() + ": ";
     }
 
     std::string Log::log_level_to_string(const LogLevel &aLevel)
@@ -90,11 +105,11 @@ namespace clib
     {
         std::cout << aMessage << "\n";
     }
-    
+
     LogLevel parse_log_level(const char *aLevel)
     {
         std::string lLevel(aLevel);
-            
+
         if (lLevel == "DEBUG")
             return LogLevel::DEBUG;
         if (lLevel == "INFO")
@@ -107,10 +122,10 @@ namespace clib
         return LogLevel::INFO;
     }
 
-    std::string pointer_to_string(void *ptr)
-{
-    std::ostringstream oss;
-    oss << "0x" << std::hex << std::setw(sizeof(void*) * 2) << std::setfill('0') << reinterpret_cast<std::uintptr_t>(ptr);
-    return oss.str();
-}
+    std::string pointer_to_string(void *pointer)
+    {
+        std::ostringstream oss;
+        oss << "0x" << std::hex << std::setw(sizeof(void *) * 2) << std::setfill('0') << reinterpret_cast<std::uintptr_t>(pointer);
+        return oss.str();
+    }
 }

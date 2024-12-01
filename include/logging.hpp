@@ -14,14 +14,16 @@ namespace clib
         ERROR
     };
 
-    LogLevel parse_log_level(const char* aLevel);
-    std::string pointer_to_string(void* ptr);
+    std::string get_prefix(const std::string &aLevel);
+    LogLevel parse_log_level(const char *aLevel);
+    std::string pointer_to_string(void *ptr);
 
     class Log
     {
     public:
         static Log &get_instance();
-        void log(const LogLevel &level, const std::string &aMessage);
+        static bool &is_initialized();
+        void log(const LogLevel &aLevel, const std::string &aMessage);
         void set_log_level(const LogLevel &aLevel);
 
     private:
@@ -30,9 +32,14 @@ namespace clib
 
         std::string log_level_to_string(const LogLevel &aLevel);
         void write_to_console(const std::string &aMessage);
+        std::string get_prefix(const LogLevel &aLevel);
+        std::string get_date_time();
+        std::string get_thread();
+
         // TODO write to file
 
         static Log mInstance;
+        static bool mIsInitialized;
         LogLevel mCurrentLevel;
         std::mutex mMutex;
     };

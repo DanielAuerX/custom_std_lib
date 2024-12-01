@@ -1,23 +1,25 @@
 
 #include <iostream>
 #include <stdexcept>
+#include "logging.hpp"
 
 namespace clib
 {
+    clib::Log &logger = clib::Log::get_instance();
 
     template <typename T>
     LinkedList<T>::LinkedList()
     {
         mLength = 0;
         mHead = nullptr;
-        std::cout << "instantiating new LinkedList" << "\n";
-        std::cout << "current length: " << mLength << "\n";
+        logger.log(LogLevel::DEBUG, "instantiating new LinkedList");
+            logger.log(LogLevel::DEBUG, "current length: " + std::to_string(mLength));
     }
 
     template <typename T>
     LinkedList<T>::~LinkedList()
     {
-        std::cout << "calling destructor\n";
+        logger.log(LogLevel::DEBUG, "Calling destructor");
         while (mHead)
         {
             pop_front(); // delete head
@@ -36,8 +38,9 @@ namespace clib
         lNode->next = mHead;
         mHead = lNode;
         mLength++;
-        std::cout << "pushed front: " << aData << "; new head at: " << lNode
-                  << ", current length: " << mLength << "\n";
+        logger.log(LogLevel::DEBUG, "pushed front: " + std::to_string(aData) +
+                                        "; new head at: " + clib::pointer_to_string(lNode) +
+                                        ", current length: " + std::to_string(mLength));
     }
 
     template <typename T>
@@ -45,7 +48,7 @@ namespace clib
     {
         if (mHead == nullptr)
         {
-            std::cout << "the list is empty. Adding first node\n";
+            logger.log(LogLevel::DEBUG, "the list is empty. Adding first node");
             push_front(aData);
             return;
         }
@@ -53,8 +56,9 @@ namespace clib
         Node *lBack = get_back();
         lBack->next = lNode;
         mLength++;
-        std::cout << "pushed back: " << aData << "; new head at: " << lNode
-                  << ", current length: " << mLength << "\n";
+        logger.log(LogLevel::DEBUG, "pushed back: " + std::to_string(aData) +
+                                        "; new node at: " + clib::pointer_to_string(lNode) +
+                                        ", current length: " + std::to_string(mLength));
     }
 
     /*
@@ -67,19 +71,20 @@ namespace clib
     {
         if (mHead == nullptr)
         {
-            std::cout << "the list is empty. Cannot pop the front\n";
+            logger.log(LogLevel::WARNING, "the list is empty. cannot pop the front");
             return;
         }
         Node *lTemp = mHead;
         mHead = mHead->next;
         delete lTemp;
         mLength--;
-        std::cout << "popping front; deleting node at: " << lTemp
-                  << ", new head at: " << mHead << "\n";
+        logger.log(LogLevel::DEBUG, "popping front; deleting node at: " + clib::pointer_to_string(lTemp) +
+                                        ", new head at: " +
+                                        clib::pointer_to_string(mHead));
         if (mLength == 0)
         {
             mHead = nullptr;
-            std::cout << "the list is now empty.\n";
+            logger.log(LogLevel::DEBUG, "the list is now empty");
         }
     }
 
@@ -88,7 +93,7 @@ namespace clib
     {
         if (mHead == nullptr)
         {
-            std::cout << "the list is empty. Cannot pop the back\n";
+            logger.log(LogLevel::WARNING, "the list is empty. Cannot pop the back");
             return;
         }
         Node *lTemp = mHead;
@@ -101,12 +106,12 @@ namespace clib
         lTemp->next = nullptr;
         delete lBack;
         mLength--;
-        std::cout << "popping back; deleting node at: " << lBack
-                  << ", new length: " << mLength << "\n";
+        logger.log(LogLevel::DEBUG, "popping back; deleting node at: " + clib::pointer_to_string(lBack) +
+                                        ", new length: " + std::to_string(mLength));
         if (mLength == 0)
         {
             mHead = nullptr;
-            std::cout << "the list is now empty.\n";
+            logger.log(LogLevel::DEBUG, "The list is now empty");
         }
     }
 
