@@ -2,7 +2,10 @@
 #include "../include/linkedlist.hpp"
 #include "../include/memory_alloc.hpp"
 #include "../include/logging.hpp"
+#include "../include/unique_pointer.hpp"
 #include <iostream>
+#include <string>
+#include <sstream>
 
 using namespace clib;
 
@@ -18,6 +21,13 @@ void printContentArrayList(const ArrayList<int> &arrayList, const std::string &t
         }
     }
     std::cout << result << "\n";
+}
+
+std::string pointer_to_string(void *ptr)
+{
+    std::ostringstream oss;
+    oss << ptr;
+    return oss.str();
 }
 
 void testArrayList()
@@ -121,12 +131,52 @@ void test_logging()
     // logger.log(clib::LogLevel::INFO, "This is a test with variables {}", testInt);
 }
 
+void test_unique_pointer()
+{
+    using namespace clib;
+
+    Log &logger = Log::get_instance();
+
+    UniquePtr<int> uniqueInt(new int(42));
+
+    //std::string msg = "unique pointer value" + std::to_string(uniqueInt.get()); 
+    logger.log(LogLevel::INFO, "unique pointer value (using get): " + std::to_string(*uniqueInt.get()));
+
+    uniqueInt.reset(new int(99)); // different value
+    logger.log(LogLevel::INFO, "value after reset: " + std::to_string(*uniqueInt));
+
+    // no argument -> set to nullptr
+    uniqueInt.reset();
+    if (uniqueInt.get() == nullptr) {
+        logger.log(LogLevel::INFO, "pointer set to nullptr");
+    } else {
+        logger.log(LogLevel::ERROR, "failed to reset");
+    }
+
+    UniquePtr<std::string> uniqueString(new std::string("test string"));
+    logger.log(LogLevel::INFO, "string value (using * operator): " + *uniqueString);
+    logger.log(LogLevel::INFO, "string length (using -> operator): " + std::to_string(uniqueString->length()));
+
+    std::string *rawPtr = uniqueString.release();
+    if (uniqueString.get() == nullptr) {
+        logger.log(LogLevel::INFO, "tes release: successful");
+    } else {
+        logger.log(LogLevel::ERROR, "tes release: failed");
+    }
+
+    logger.log(LogLevel::INFO, "raw pointer value (released pointer): " + *rawPtr);
+    delete rawPtr;
+
+}
+
 int main()
 {
+    test_unique_pointer();
+
     // testMemoryAlloc();
-    testLinkedList();
+    // testLinkedList();
     // testArrayList();
     // test_logging();
-    //std::cout << "final memory usage: " << get_memory_usage() << "\n";
+    // std::cout << "final memory usage: " << get_memory_usage() << "\n";
     return 0;
 }

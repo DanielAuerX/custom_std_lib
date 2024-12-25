@@ -1,5 +1,6 @@
 *TODO:*
 - Logging (What to do about the logging before init and during memory allocation? {} for args})
+- Smart Pointers
 - cf TODO
 - ...
 
@@ -9,6 +10,6 @@
 - Override memory allocation
 
 
-###Logging
+### Logging
 + set log level with env variable CLIB_LOG_LEVEL: DEBUG, INFO, WARNING, ERROR
 + default log level INFO
